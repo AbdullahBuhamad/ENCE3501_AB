@@ -1,0 +1,36 @@
+*** SPICE deck for cell test_inverters_load{sch} from library Lab4
+*** Created on Fri Oct 10, 2025 21:46:22
+*** Last revised on Fri Oct 10, 2025 22:16:11
+*** Written on Fri Oct 10, 2025 22:16:52 by Electric VLSI Design System, version 9.08
+*** Layout tech: mocmos, foundry MOSIS
+*** UC SPICE *** , MIN_RESIST 4.0, MIN_CAPAC 0.1FF
+
+*** SUBCIRCUIT Lab4__Inverter_1 FROM CELL Inverter_1{sch}
+.SUBCKT Lab4__Inverter_1 in out
+** GLOBAL gnd
+** GLOBAL vdd
+Mnmos@0 out in gnd gnd NMOS L=1.8U W=1.8U
+Mpmos@1 out in vdd vdd PMOS L=1.8U W=3.6U
+.ENDS Lab4__Inverter_1
+
+*** SUBCIRCUIT Lab4__Inverter_2 FROM CELL Inverter_2{sch}
+.SUBCKT Lab4__Inverter_2 in out
+** GLOBAL gnd
+** GLOBAL vdd
+Mnmos@0 out in gnd gnd NMOS L=1.8U W=7.2U
+Mpmos@0 out in vdd vdd PMOS L=1.8U W=14.4U
+.ENDS Lab4__Inverter_2
+
+.global gnd vdd
+
+*** TOP LEVEL CELL: test_inverters_load{sch}
+Ccap@0 gnd vout1 {x}
+Ccap@1 gnd vout2 {x}
+XInverter@0 vin vout1 Lab4__Inverter_1
+XInverter@1 vin vout2 Lab4__Inverter_2
+vdd vdd 0 DC 5
+vin vin 0 pulse(0v 5v 5n 1n 1n 12n 25n)
+.step param x list 1f 10f 100f
+.trans 0 25n 0 100p
+.include C5_models.txt
+.END
