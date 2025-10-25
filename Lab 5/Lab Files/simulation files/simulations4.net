@@ -1,0 +1,37 @@
+*** SPICE deck for cell simulations{sch} from library Lab5
+*** Created on Fri Oct 17, 2025 11:01:45
+*** Last revised on Fri Oct 24, 2025 23:57:46
+*** Written on Fri Oct 24, 2025 23:58:11 by Electric VLSI Design System, version 9.08
+*** Layout tech: mocmos, foundry MOSIS
+*** UC SPICE *** , MIN_RESIST 4.0, MIN_CAPAC 0.1FF
+
+*** SUBCIRCUIT Lab5__XOR_2 FROM CELL XOR_2{sch}
+.SUBCKT Lab5__XOR_2 A B Y
+** GLOBAL gnd
+** GLOBAL vdd
+Mnmos@0 notA_out A gnd gnd NMOS L=0.6U W=1.8U
+Mnmos@1 notB_out B gnd gnd NMOS L=0.6U W=1.8U
+Mnmos@2 Y notB_out net@57 gnd NMOS L=0.6U W=1.8U
+Mnmos@3 net@57 notA_out gnd gnd NMOS L=0.6U W=1.8U
+Mnmos@4 Y A net@57 gnd NMOS L=0.6U W=1.8U
+Mnmos@5 net@57 B gnd gnd NMOS L=0.6U W=1.8U
+Mpmos@0 notA_out A vdd vdd PMOS L=0.6U W=1.8U
+Mpmos@1 notB_out B vdd vdd PMOS L=0.6U W=1.8U
+Mpmos@2 net@31 B net@25 vdd PMOS L=0.6U W=1.8U
+Mpmos@3 Y notA_out net@31 vdd PMOS L=0.6U W=1.8U
+Mpmos@4 net@30 A net@25 vdd PMOS L=0.6U W=1.8U
+Mpmos@5 Y notB_out net@30 vdd PMOS L=0.6U W=1.8U
+.ENDS Lab5__XOR_2
+
+
+
+.global gnd vdd
+
+*** TOP LEVEL CELL: simulations{sch}
+XXOR_2@1 d_in vdd xor_d_out Lab5__XOR_2
+
+vdd vdd 0 dc 5
+vin d_in 0 pulse(0v 5v 10n 1n 1n 40n 40n)
+.tran 0 40n
+.include C5_models.txt
+.END

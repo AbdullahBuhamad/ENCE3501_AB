@@ -1,0 +1,25 @@
+*** SPICE deck for cell simulations{sch} from library Lab5
+*** Created on Fri Oct 17, 2025 11:01:45
+*** Last revised on Fri Oct 24, 2025 23:53:47
+*** Written on Fri Oct 24, 2025 23:54:08 by Electric VLSI Design System, version 9.08
+*** Layout tech: mocmos, foundry MOSIS
+*** UC SPICE *** , MIN_RESIST 4.0, MIN_CAPAC 0.1FF
+
+*** SUBCIRCUIT Lab5__NOT FROM CELL NOT{sch}
+.SUBCKT Lab5__NOT A Y
+** GLOBAL gnd
+** GLOBAL vdd
+Mnmos@0 Y A gnd gnd NMOS L=0.6U W=1.8U
+Mpmos@0 Y A vdd vdd PMOS L=0.6U W=1.8U
+.ENDS Lab5__NOT
+
+.global gnd vdd
+
+*** TOP LEVEL CELL: simulations{sch}
+XNOT@0 d_in not_d_out Lab5__NOT
+
+vdd vdd 0 dc 5
+vin d_in 0 pulse(0v 5v 10n 1n 1n 40n 40n)
+.tran 0 40n
+.include C5_models.txt
+.END

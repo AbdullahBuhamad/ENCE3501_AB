@@ -1,0 +1,21 @@
+*** SPICE deck for cell simulations{sch} from library Lab5
+*** Created on Fri Oct 17, 2025 11:01:45
+*** Last revised on Sat Oct 25, 2025 00:10:46
+*** Written on Sat Oct 25, 2025 00:11:04 by Electric VLSI Design System, version 9.08
+*** Layout tech: mocmos, foundry MOSIS
+*** UC SPICE *** , MIN_RESIST 4.0, MIN_CAPAC 0.1FF
+
+*** SUBCIRCUIT Lab5__full_adder FROM CELL full_adder{sch}
+.SUBCKT Lab5__full_adder A B cin cout S
+.ENDS Lab5__full_adder
+
+*** TOP LEVEL CELL: simulations{sch}
+Xfull_add@0 A B cin cout S Lab5__full_adder
+vdd vdd 0 dc 5
+va a 0 pulse(0v 5v 10n 1n 1n 10n 20n)
+vb b 0 pulse(0v 5v 10n 1n 1n 10n 20n)
+vcin cin 0 pulse(0v 5v 2n 1n 1n 10n 20n)
+.tran 0 60n
+.include C5_models.txt
+
+.END
