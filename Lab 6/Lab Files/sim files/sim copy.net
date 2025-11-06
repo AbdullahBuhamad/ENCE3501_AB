@@ -1,0 +1,33 @@
+*** SPICE deck for cell sim{sch} from library Lab6
+*** Created on Sat Nov 01, 2025 12:09:52
+*** Last revised on Sat Nov 01, 2025 13:01:33
+*** Written on Sat Nov 01, 2025 13:02:03 by Electric VLSI Design System, version 9.08
+*** Layout tech: mocmos, foundry MOSIS
+*** UC SPICE *** , MIN_RESIST 4.0, MIN_CAPAC 0.1FF
+
+*** SUBCIRCUIT Lab6__Regulation FROM CELL Regulation{sch}
+.SUBCKT Lab6__Regulation En Vout
+** GLOBAL gnd
+** GLOBAL vdd
+Mnmos@0 net@1 net@0 gnd gnd N_50n L=0.3U W=3U
+Mnmos@1 net@0 net@20 gnd gnd N_50n L=0.3U W=3U
+Mnmos@2 En net@43 gnd gnd N_50n L=0.3U W=3U
+Mpmos@0 net@1 net@0 vdd vdd P_50n L=0.3U W=6U
+Mpmos@1 net@0 gnd vdd vdd P_50n L=12U W=6U
+Mpmos@2 net@0 net@1 vdd vdd P_50n L=12U W=6U
+Mpmos@3 En net@43 vdd vdd P_50n L=0.3U W=6U
+Rres@0 net@20 Vout 3MEG
+Rres@1 vdd net@20 20MEG
+.ENDS Lab6__Regulation
+
+.global gnd vdd
+
+*** TOP LEVEL CELL: sim{sch}
+XRegulati@0 en vout Lab6__Regulation
+
+
+vdd vdd 0 DC 1V
+vout vout 0 SIN(1.5 1.5 50)
+.tran 0 1
+.include cmosedu_models.txt
+.END
