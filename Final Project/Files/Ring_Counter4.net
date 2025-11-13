@@ -1,0 +1,95 @@
+*** SPICE deck for cell ring_counter{sch} from library ring_counter
+*** Created on Sat Nov 08, 2025 21:34:36
+*** Last revised on Tue Nov 11, 2025 21:53:49
+*** Written on Tue Nov 11, 2025 21:54:18 by Electric VLSI Design System, version 9.08
+*** Layout tech: mocmos, foundry MOSIS
+*** UC SPICE *** , MIN_RESIST 4.0, MIN_CAPAC 0.1FF
+
+*** SUBCIRCUIT ring_counter__and2_1x FROM CELL and2_1x{sch}
+.SUBCKT ring_counter__and2_1x a b y
+** GLOBAL gnd
+** GLOBAL vdd
+Mnmos@0 net@2 b net@1 gnd N_50n L=0.6U W=1.8U
+Mnmos@1 net@1 a gnd gnd N_50n L=0.6U W=1.8U
+Mnmos@2 y net@2 gnd gnd N_50n L=0.6U W=2.1U
+Mpmos@0 vdd b net@2 vdd P_50n L=0.6U W=1.8U
+Mpmos@1 vdd a net@2 vdd P_50n L=0.6U W=1.8U
+Mpmos@2 vdd net@2 y vdd P_50n L=0.6U W=3U
+.ENDS ring_counter__and2_1x
+
+*** SUBCIRCUIT ring_counter__inv_1x FROM CELL inv_1x{sch}
+.SUBCKT ring_counter__inv_1x a y
+** GLOBAL gnd
+** GLOBAL vdd
+Mnmos@0 y a gnd gnd N_50n L=0.6U W=2.1U
+Mpmos@0 vdd a y vdd P_50n L=0.6U W=3U
+.ENDS ring_counter__inv_1x
+
+*** SUBCIRCUIT ring_counter__nor3_1x FROM CELL nor3_1x{sch}
+.SUBCKT ring_counter__nor3_1x a b c y
+** GLOBAL gnd
+** GLOBAL vdd
+Mnmos@0 y a gnd gnd N_50n L=0.6U W=2.7U
+Mnmos@1 y b gnd gnd N_50n L=0.6U W=2.7U
+Mnmos@2 y c gnd gnd N_50n L=0.6U W=2.7U
+Mpmos@0 vdd a net@7 vdd P_50n L=0.6U W=6.3U
+Mpmos@1 net@7 b net@13 vdd P_50n L=0.6U W=6.3U
+Mpmos@2 net@13 c y vdd P_50n L=0.6U W=6.3U
+.ENDS ring_counter__nor3_1x
+
+*** SUBCIRCUIT ring_counter__d_type_ff_ms_bw FROM CELL d_type_ff_ms_bw{sch}
+.SUBCKT ring_counter__d_type_ff_ms_bw Clk D Q Q- R S
+** GLOBAL gnd
+** GLOBAL vdd
+Xand2_1x@0 net@8 net@13 net@87 ring_counter__and2_1x
+Xand2_1x@1 D net@8 net@89 ring_counter__and2_1x
+Xand2_1x@2 net@31 net@19 net@144 ring_counter__and2_1x
+Xand2_1x@3 net@25 net@31 net@105 ring_counter__and2_1x
+Xinv_1x@0 Clk net@8 ring_counter__inv_1x
+Xinv_1x@1 D net@13 ring_counter__inv_1x
+Xinv_1x@2 net@8 net@31 ring_counter__inv_1x
+Xnor3_1x@0 S net@89 net@19 net@25 ring_counter__nor3_1x
+Xnor3_1x@1 net@25 net@87 R net@19 ring_counter__nor3_1x
+Xnor3_1x@2 R net@105 Q- Q ring_counter__nor3_1x
+Xnor3_1x@3 Q net@144 S Q- ring_counter__nor3_1x
+.ENDS ring_counter__d_type_ff_ms_bw
+
+*** SUBCIRCUIT ring_counter__xor2_1x FROM CELL xor2_1x{sch}
+.SUBCKT ring_counter__xor2_1x a b y
+** GLOBAL gnd
+** GLOBAL vdd
+Mnmos@0 net@3 a gnd gnd N_50n L=0.6U W=4.2U
+Mnmos@1 net@4 ab gnd gnd N_50n L=0.6U W=4.2U
+Mnmos@2 y b net@3 gnd N_50n L=0.6U W=4.2U
+Mnmos@3 y bb net@4 gnd N_50n L=0.6U W=4.2U
+Mnmos@4 bb b gnd gnd N_50n L=0.6U W=1.8U
+Mnmos@5 ab a gnd gnd N_50n L=0.6U W=1.8U
+Mpmos@0 net@7 b y vdd P_50n L=0.6U W=6U
+Mpmos@1 vdd ab net@7 vdd P_50n L=0.6U W=6U
+Mpmos@2 net@8 bb y vdd P_50n L=0.6U W=6U
+Mpmos@3 vdd a net@8 vdd P_50n L=0.6U W=6U
+Mpmos@4 vdd b bb vdd P_50n L=0.6U W=2.7U
+Mpmos@5 vdd a ab vdd P_50n L=0.6U W=2.7U
+.ENDS ring_counter__xor2_1x
+
+.global gnd vdd
+
+*** TOP LEVEL CELL: ring_counter{sch}
+Xd_type_f@12 Phase_Count net@560 net@102 d_type_f@12_Q- Clear gnd ring_counter__d_type_ff_ms_bw
+Xd_type_f@13 Phase_Count net@102 net@50 d_type_f@13_Q- Clear gnd ring_counter__d_type_ff_ms_bw
+Xd_type_f@14 Phase_Count net@50 net@59 d_type_f@14_Q- Clear gnd ring_counter__d_type_ff_ms_bw
+Xd_type_f@15 Phase_Count net@59 net@103 net@560 Clear gnd ring_counter__d_type_ff_ms_bw
+Xxor2_1x@0 net@103 net@102 Phase1 ring_counter__xor2_1x
+Xxor2_1x@1 net@102 net@50 Phase2 ring_counter__xor2_1x
+Xxor2_1x@2 net@50 net@59 Phase3 ring_counter__xor2_1x
+Xxor2_1x@3 net@59 net@103 Phase4 ring_counter__xor2_1x
+
+* Spice Code nodes in cell cell 'ring_counter{sch}'
+Vdd vdd 0 1.0
+Vgnd gnd 0 0
+Vclock Phase_Count gnd PULSE(0 1 0 1n 1n 50n 100n)
+Vclear Clear gnd PULSE(0 1 0 1n 1n 10n 500n)
+.tran 1n 2000n
+.PROBE TRAN V(net@102) V(net@50) V(net@59) V(net@103) V(phase_count)
+.include cmosedu_models.txt
+.END
